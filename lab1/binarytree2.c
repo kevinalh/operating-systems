@@ -21,6 +21,6 @@ int main(int argc, char* argv[]) {
 		else j++;
 		wait(NULL);
 	}
-	fprintf(stderr, "Soy el proceso %d\n", (int) getpid()-padre+1);
+	fprintf(stderr, "Soy el proceso %d con pid %d y ppid %d\n", (int) getpid()-padre+1, getpid(), getppid());
 	return 0;
 }

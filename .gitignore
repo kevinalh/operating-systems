@@ -10,3 +10,5 @@ tests/
 *.txt
 
 build/
+__pycache__/
+.idea/

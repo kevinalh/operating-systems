@@ -17,21 +17,24 @@ nTobacco = nPaper = nMatch = 0
 
 
 def agent_a():
-    agentSem.acquire()
-    tobacco.release()
-    paper.release()
+    while True:
+        agentSem.acquire()
+        tobacco.release()
+        paper.release()
 
 
 def agent_b():
-    agentSem.acquire()
-    paper.release()
-    match.release()
+    while True:
+        agentSem.acquire()
+        paper.release()
+        match.release()
 
 
 def agent_c():
-    agentSem.acquire()
-    tobacco.release()
-    match.release()
+    while True:
+        agentSem.acquire()
+        tobacco.release()
+        match.release()
 
 
 def pusher_a():
@@ -41,72 +44,102 @@ def pusher_a():
     the corresponding smoker. Else, it will just
     leave the ingredient on the table and leave.
     """
-    global nPaper, nMatch, nTobacco
-    tobacco.acquire()
-    mutex.acquire()
+    while True:
+        global nPaper, nMatch, nTobacco
+        tobacco.acquire()
+        mutex.acquire()
 
-    if nPaper > 0:
-        nPaper -= 1
-        matchSem.release()
-    elif nMatch > 0:
-        nMatch -= 1
-        paperSem.release()
-    else:
-        nTobacco += 1
+        if nPaper > 0:
+            nPaper -= 1
+            matchSem.release()
+        elif nMatch > 0:
+            nMatch -= 1
+            paperSem.release()
+        else:
+            nTobacco += 1
 
-    mutex.release()
+        mutex.release()
 
 
 def pusher_b():
     global nPaper, nMatch, nTobacco
-    match.acquire()
-    mutex.acquire()
+    while True:
+        match.acquire()
+        mutex.acquire()
 
-    if nPaper > 0:
-        nPaper -= 1
-        tobaccoSem.release()
-    elif nTobacco > 0:
-        nTobacco -= 1
-        paperSem.release()
-    else:
-        nMatch += 1
+        if nPaper > 0:
+            nPaper -= 1
+            tobaccoSem.release()
+        elif nTobacco > 0:
+            nTobacco -= 1
+            paperSem.release()
+        else:
+            nMatch += 1
 
-    mutex.release()
+        mutex.release()
 
 
 def pusher_c():
     global nPaper, nMatch, nTobacco
-    paper.acquire()
-    mutex.acquire()
+    while True:
+        paper.acquire()
+        mutex.acquire()
 
-    if nTobacco > 0:
-        nTobacco -= 1
-        matchSem.release()
-    elif nMatch > 0:
-        nMatch -= 1
-        tobaccoSem.release()
-    else:
-        nPaper += 1
+        if nTobacco > 0:
+            nTobacco -= 1
+            matchSem.release()
+        elif nMatch > 0:
+            nMatch -= 1
+            tobaccoSem.release()
+        else:
+            nPaper += 1
 
-    mutex.release()
+        mutex.release()
 
 
 def smoker_a():
-    matchSem.acquire()
-    # Make cigarette
-    agentSem.release()
-    # Smoke cigarette
+    while True:
+        matchSem.acquire()
+        # Make cigarette
+        agentSem.release()
+        # Smoke cigarette
+        print("A: Smoking cigarette")
 
 
 def smoker_b():
-    tobaccoSem.acquire()
-    # Make cigarette
-    agentSem.release()
-    # Smoke cigarette
+    while True:
+        tobaccoSem.acquire()
+        # Make cigarette
+        agentSem.release()
+        # Smoke cigarette
+        print("B: Smoking cigarette")
 
 
 def smoker_c():
-    paperSem.acquire()
-    # Make cigarette
-    agentSem.release()
-    # Smoke cigarette
+    while True:
+        paperSem.acquire()
+        # Make cigarette
+        agentSem.release()
+        # Smoke cigarette
+        print("C: Smoking cigarette")
+
+
+t_smoker_a = Thread(target=smoker_a, name='Smoker A')
+t_smoker_b = Thread(target=smoker_b, name='Smoker B')
+t_smoker_c = Thread(target=smoker_c, name='Smoker C')
+t_pusher_a = Thread(target=pusher_a, name='Pusher A')
+t_pusher_b = Thread(target=pusher_b, name='Pusher B')
+t_pusher_c = Thread(target=pusher_c, name='Pusher C')
+t_agent_a = Thread(target=agent_a, name='Agent A')
+t_agent_b = Thread(target=agent_b, name='Agent B')
+t_agent_c = Thread(target=agent_c, name='Agent C')
+
+t_smoker_a.start()
+t_smoker_b.start()
+t_smoker_c.start()
+t_pusher_a.start()
+t_pusher_b.start()
+t_pusher_c.start()
+t_agent_a.start()
+t_agent_b.start()
+t_agent_c.start()

@@ -1,4 +1,8 @@
+int glo[10];
+int z = 2478;
+
 int main() {
-	int a[] = {1,2,3};
-	return 0;
+	z += 1;
+	z = 0;
+	return z;
 }

@@ -1,0 +1,46 @@
+1. El programa hace segmentation fault en la función strlen porque se está accediendo al arreglo argv en el índice 1, cuando argc = 1. Verificar argc antes de acceder al arreglo soluciona el problema. Entonces
+
+print argv[1]
+
+da el resultado esperado.
+
+2. Un error está en usar *ptr en scanf, cuando debería usarse sólo ptr, ya que recibe un puntero como parámetro. En gdb,
+
+x/4bx *ptr
+
+señala que no se puede acceder a la memoria en tal dirección, como es de esperarse. En segundo lugar, si ponemos
+
+watch *ptr
+
+se observa que el valor de *ptr cambia varias veces durante la ejecución del programa. Esto es porque la memoria no está reservada. Si sacamos 'free', ya no tenemos este problema y el valor ingresado se mantiene.
+
+3. arrayint es del tipo int**, y array del tipo int***. Cuando ejecutamos
+
+arrayint[i] = (*array)[i]
+
+es lo mismo que ejecutar
+
+*(arrayint + i) = *((*array) + i)
+
+Puesto en palabras, arrayint[i] ahora es el puntero A[i], del tipo int*.
+
+Gdb muestra que el segmentation fault se da en la función free. 
+
+6. Se pretende imprimir los valores con la idea de que el compilador los está poniendo en el orden en el que se declararon.
+
+Incluso usando -O0, esto no es cierto.
+
+p &a
+0x7fffffffde7c
+
+x/1gf &b
+0x7fffffffde70: 19.23
+
+p &c
+0x7fffffffde78
+
+x/5wd d
+0x7fffffffdee0: 17 18 15 19
+0x7fffffffdef0: 20
+
+Vemos entonces que se pusieron en el orden: b, c, a, d, pero incluso se están dejando espacios entre ellos, de manera que no tiene sentido estar haciendo estas operaciones

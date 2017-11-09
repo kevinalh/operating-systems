@@ -1,0 +1,38 @@
+FAT32:
+
+Bytes per sector: 2*16^2 = 512
+Sectors per cluster: 8
+Sectors in reserved area: 32
+
+FATs: 2
+Media type: Fixed disk (0xF8)
+Sectors of one FAT: 8005
+
+Cluster of root: 02
+Sector of FSINFO: Sector 01
+Backup boot sector: Sector 06
+
+Data area starts at: Sector 32+8005*2 = 16042
+
+FAT section:
+
+2->EOF
+3->4->5->6->7->8->9->10->...->30->31->EOF
+32->33->34->...->125->126->EOF
+127->128->129->EOF
+
+Root starts at cluster 02, that is, sector 16042.
+
+File 1:
+Checksum: 0x2D
+Andrew-Tanenbaum.jpg
+Cluster: 03
+Archive
+
+File 2:
+Carrier - FAT File Systems.pdf
+Cluster: 32
+
+File 3:
+Minix3.jpeg
+Cluster: 127

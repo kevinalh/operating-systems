@@ -8,7 +8,13 @@ tests/
 *.exe
 *.o
 *.txt
+*.swp*
 
 build/
 __pycache__/
 .idea/
+
+*.zip*
+*.img*
+resultados/
+

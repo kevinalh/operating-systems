@@ -1,0 +1,53 @@
+FAT16:
+
+Bytes per sector: 2*16^2 = 512
+Sectors per cluster: 8*16 = 128
+Sectors of reserved area: 1
+FATs: 2
+Max files in root: 8*16^2 = 2048
+Size of FAT: 16^2 = 256
+Sectors in file system: 8212480
+
+The layout is then:
+Sector 0: Reserved area
+FAT area starts at: 512
+The second FAT at: 512+256*512=131584
+Data area starts at: 131584+256*512=262656,
+	or sector 513
+
+Sector of cluster 2: 641
+
+It is a coincidence that the root directory has
+2048*32/512 sectors = sectors of one cluster.
+The max files per root entry determines the size
+of the root directory.
+
+FAT has the following entries:
+3->4, 4->5, 5->6, 6->7, 7->8, 10->11
+2: Unallocated
+11: EOF
+8: EOF
+9: EOF
+
+Sector 513, root directory:
+First file: LFN with checksum 1F
+- 3: .pdf
+- 2:  File Systems
+- 1: Carrier - FAT
+- Short: CARRIE~1PDF
+- Full: Carrier - FAT File Systems.pdf
+Archive
+Cluster address: 3
+Size: 388063
+
+Second file: LFN with checksum 4C
+- Full: Minix3.jpeg
+Cluster address: 9
+Size: 8583
+
+Third file: LFN with checksum 2D
+- 2: aum.jpg
+- 1: Andrew-Tanenb
+- Full: Andrew-Tanenbaum.jpg
+Cluster address: 10
+Size: 116097
